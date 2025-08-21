@@ -1,0 +1,15 @@
+plugins {
+    id "com.github.node-gradle.node" version "7.0.2"
+}
+
+node {
+    version = '20.0.0'
+    npmVersion = '9.6.7'
+    download = true
+    workDir = file("${project.buildDir}/nodejs")
+    npmWorkDir = file("${project.buildDir}/npm")
+}
+
+tasks.register('npmBuild', com.github.gradle.node.npm.task.NpmTask) {
+    args = ['run', 'build']
+}

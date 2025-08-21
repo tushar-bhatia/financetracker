@@ -1,0 +1,14 @@
+plugins {
+    id 'base'
+}
+
+allprojects {
+    group = 'com.finance'
+    version = '1.0.0-SNAPSHOT'
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+}

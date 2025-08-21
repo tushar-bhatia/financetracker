@@ -1,0 +1,2 @@
+rootProject.name = 'finance-tracker'
+include 'finance-tracker-backend', 'finance-tracker-frontend'
