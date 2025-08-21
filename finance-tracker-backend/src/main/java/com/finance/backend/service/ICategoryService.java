@@ -8,4 +8,5 @@ public interface ICategoryService {
     Category addCategory(Category category);
     Category updateCategory(Category category);
     void deleteCategory(int id);
+    Category findCategoryById(int id);
 }

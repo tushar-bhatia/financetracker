@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements ICategoryService {
@@ -42,5 +43,14 @@ public class CategoryServiceImpl implements ICategoryService {
             throw new IllegalArgumentException("Category with id " + id + " does not exist");
         }
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Category findCategoryById(int id) {
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isEmpty()) {
+            throw new IllegalArgumentException("Category with id " + id + " does not exist");
+        }
+        return category.get();
     }
 }

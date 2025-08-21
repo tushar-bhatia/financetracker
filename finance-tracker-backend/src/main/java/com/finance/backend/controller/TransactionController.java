@@ -27,7 +27,7 @@ public class TransactionController {
     @Qualifier("transactionServiceImpl")
     ITransactionService transactionService;
 
-    @GetMapping("/get")
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAllTransactions(@Validated(OnFilter.class) @RequestBody(required = false) TransactionRequest transactionRequest) {
         LOGGER.info("Request received to display transactions");
         try {
@@ -40,13 +40,31 @@ public class TransactionController {
         }
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getTransactionById(@NotNull(message = "id can't be null")
+                                                    @Positive(message = "id must be positive")
+                                                    @PathVariable("id") int id) {
+        LOGGER.info("Request received to get a transaction with id {}", id);
+        try {
+            Transaction transaction = transactionService.findTransactionById(id);
+            LOGGER.info("Transaction fetched successfully with id {}", id);
+            return new ResponseEntity<>(transaction, HttpStatus.OK);
+        } catch(IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(Exception e) {
+            LOGGER.error("Error occurred while fetching transaction with id {}", id, e);
+            throw e;
+        }
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> addTransaction(@Validated(OnCreate.class) @RequestBody TransactionRequest transactionRequest) {
         LOGGER.info("Request received to add new transaction");
         try {
             Transaction savedTransaction = transactionService.addTransaction(transactionRequest);
             LOGGER.info("New transaction added successfully with id {}", savedTransaction.getId());
-            return new ResponseEntity<>("Transaction added successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
         } catch(IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -28,7 +28,7 @@ public class CategoryController {
     @Qualifier("categoryServiceImpl")
     private ICategoryService categoryService;
 
-    @GetMapping("/get")
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAllCategories() {
         LOGGER.info("Request received to display all categories");
         try {
@@ -41,6 +41,24 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getAllCategories(@NotNull(message = "id can't be null")
+                                                  @Positive(message = "id must be positive")
+                                                  @PathVariable("id") Integer id) {
+        LOGGER.info("Request received to fetch category with id {}", id);
+        try {
+            Category category = categoryService.findCategoryById(id);
+            LOGGER.info("Category fetched successfully with id {}", id);
+            return new ResponseEntity<>(category, HttpStatus.OK);
+        } catch(IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(Exception e) {
+            LOGGER.error("Error occurred while fetching category with id {}", id, e);
+            throw e;
+        }
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> addCategory(@NotBlank(message = "Category name can not be blank")
                                              @RequestParam(name = "name") String name) {
@@ -49,7 +67,7 @@ public class CategoryController {
         try {
             Category savedCategory = categoryService.addCategory(category);
             LOGGER.info("New category {} added successfully with id {}", savedCategory.getName(), savedCategory.getId());
-            return new ResponseEntity<>(category.getName() + " added successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
         } catch(IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -63,7 +81,7 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(@NotNull(message = "id can't be null")
                                                 @Positive(message = "id must be positive")
                                                 @PathVariable("id") Integer id) {
-        LOGGER.info("Request received to delete transaction with id {}", id);
+        LOGGER.info("Request received to delete category with id {}", id);
         try {
             categoryService.deleteCategory(id);
             LOGGER.info("Category deleted successfully with id {}", id);

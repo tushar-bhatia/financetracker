@@ -60,6 +60,15 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
+    public Transaction findTransactionById(int id) {
+        Optional<Transaction> transaction = transactionRepository.findById(id);
+        if (transaction.isEmpty()) {
+            throw new IllegalArgumentException("Transaction with id " + id + " does not exist");
+        }
+        return transaction.get();
+    }
+
+    @Override
     public void deleteTransaction(int id) {
         if (!transactionRepository.existsById(id)) {
             throw new IllegalArgumentException("Transaction with id " + id + " does not exist");
