@@ -1,6 +1,4 @@
 import {Injectable, ErrorHandler, inject} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from './error';
 import { ErrorQueueService } from './error-queue-service';
 
 @Injectable({
