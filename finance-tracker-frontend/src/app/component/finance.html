@@ -1,0 +1,84 @@
+<div class="app-container">
+  <header class="app-header">
+    <div class="logo-title">
+      <img src="../../" alt="Finance Tracker Logo" class="logo" />
+      <h1>Finance Tracker</h1>
+    </div>
+    <div class="summary">
+      <div class="summary-item">
+        <div class="label">Total Balance</div>
+        <div class="value">{{ balance | currency:'INR':'symbol' }}</div>
+      </div>
+      <div class="summary-item small">
+        <div class="label">Income</div>
+        <div class="value income">{{ totalIncome | currency:'INR':'symbol' }}</div>
+      </div>
+      <div class="summary-item small">
+        <div class="label">Expense</div>
+        <div class="value expense">{{ totalExpense | currency:'INR':'symbol' }}</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="controls">
+    <input type="search" placeholder="Search..." [(ngModel)]="q" (input)="applyFilters()" class="search" />
+
+    <div class="date-filters">
+      <input type="month" [(ngModel)]="fromMonth" (change)="applyFilters()" />
+      <span class="dash">—</span>
+      <input type="month" [(ngModel)]="toMonth" (change)="applyFilters()" />
+    </div>
+  </section>
+
+  <main>
+    <div *ngIf="!loading" class="loading">Loading transactions...</div>
+    <div *ngIf="loading && transactions.length === 0" class="empty">No transactions found.</div>
+
+    <!-- Desktop Table -->
+    <table class="tx-table" *ngIf="loading && transactions.length > 0">
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th class="amount-col">Amount</th>
+        <th>Type</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let tx of transactions">
+        <td>{{ tx.transactionDate | date:'mediumDate' }}</td>
+        <td>{{ tx.description }}</td>
+        <td>{{ tx.category?.name }}</td>
+        <td class="amount-col">{{ tx.amount | currency:'INR':'symbol' }}</td>
+        <td>
+            <span class="badge" [ngClass]="{income: tx.transactionType === 'INCOME', expense: tx.transactionType === 'EXPENSE'}">
+              {{ tx.transactionType }}
+            </span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Mobile Card View -->
+    <div class="card-list" *ngIf="loading && transactions.length > 0">
+      <article class="tx-card" *ngFor="let tx of transactions">
+        <div class="card-row top">
+          <div class="date">{{ tx.transactionDate | date:'mediumDate' }}</div>
+          <div class="amount">{{ tx.amount | currency:'INR':'symbol' }}</div>
+        </div>
+        <div class="card-row">
+          <div class="desc">{{ tx.description }}</div>
+        </div>
+        <div class="card-row bottom">
+          <div class="category">{{ tx.category.name }}</div>
+          <div class="type">
+            <span class="badge" [ngClass]="{income: tx.transactionType === 'INCOME', expense: tx.transactionType === 'EXPENSE'}">
+              {{ tx.transactionType }}
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+</div>

@@ -95,7 +95,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("/edit")
+    @PutMapping("/edit")
     public ResponseEntity<?> updateCategory(@Validated(OnUpdate.class) @RequestBody Category category) {
         LOGGER.info("Request received to edit category with id {}", category.getId());
         try {

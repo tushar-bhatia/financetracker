@@ -3,8 +3,8 @@ plugins {
 }
 
 node {
-    version = '20.0.0'
-    npmVersion = '9.6.7'
+    version = '22.18.0'
+    npmVersion = '10.9.3'
     download = true
     workDir = file("${project.buildDir}/nodejs")
     npmWorkDir = file("${project.buildDir}/npm")

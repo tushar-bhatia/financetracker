@@ -27,7 +27,7 @@ public class TransactionController {
     @Qualifier("transactionServiceImpl")
     ITransactionService transactionService;
 
-    @GetMapping("/getAll")
+    @PostMapping("/getAll")
     public ResponseEntity<?> getAllTransactions(@Validated(OnFilter.class) @RequestBody(required = false) TransactionRequest transactionRequest) {
         LOGGER.info("Request received to display transactions");
         try {
@@ -92,7 +92,7 @@ public class TransactionController {
         }
     }
 
-    @PostMapping("/edit")
+    @PutMapping("/edit")
     public ResponseEntity<?> updateTransaction(@Validated(OnUpdate.class) @RequestBody TransactionRequest transactionRequest) {
         LOGGER.info("Request received to edit transaction with id {}", transactionRequest.id());
         try {
@@ -126,7 +126,7 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/download")
+    @PostMapping("/download")
     public ResponseEntity<?> downloadMonthlySummaryExcelReport(@Validated(OnFilter.class) @RequestBody(required = false) TransactionRequest transactionRequest) {
         LOGGER.info("Request received to download monthly transaction summary as Excel report");
         try {
