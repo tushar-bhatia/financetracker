@@ -20,7 +20,7 @@ export class TransactionService {
    * Fetch all transactions from backend
    */
   getAllTransactions(transactionRequest: TransactionRequest): Observable<Transaction[]> {
-    return this.http.post<Transaction[]>(`${this.apiUrl}/${environment.getAll}`, transactionRequest);
+   return this.http.post<Transaction[]>(`${this.apiUrl}/${environment.getAll}`, transactionRequest);
   }
 
   /**
@@ -47,8 +47,8 @@ export class TransactionService {
   /**
    * Optional: Delete transaction
    */
-  deleteTransaction(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${environment.delete}/${id}`);
+  deleteTransaction(id: number): Observable<string> {
+    return this.http.delete<string>(`${this.apiUrl}/${environment.delete}/${id}`, { responseType: 'text' as 'json' });
   }
 
   /**

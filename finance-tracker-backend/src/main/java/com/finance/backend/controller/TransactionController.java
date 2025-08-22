@@ -115,7 +115,7 @@ public class TransactionController {
             List<Transaction> transactions = transactionService.displayTransactions(transactionRequest);
             if (transactions.isEmpty()) {
                 LOGGER.info("No transactions found for the given criteria");
-                return new ResponseEntity<>("No transactions found", HttpStatus.OK);
+                return new ResponseEntity<>("No transactions found", HttpStatus.NO_CONTENT);
             }
             Map<YearMonth, FinanceSummary> monthlySummary = transactionService.getMonthlySummary(transactions);
             LOGGER.info("Request completed for display monthly transaction summary");

@@ -58,7 +58,7 @@ export class Finance implements OnInit {
         this.categoryData = data;
       },
       error: (err) => {
-        console.error('Error fetching categories', err);
+        throw new Error("Error fetching categories:" + err.message);
       },
     });
     this.transactionService.getAllTransactions(request).subscribe({
@@ -68,8 +68,7 @@ export class Finance implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error fetching transactions', err);
-        this.loading = false;
+        throw new Error("Error fetching transactions:" + err.message);
       },
     });
   }
@@ -99,13 +98,13 @@ export class Finance implements OnInit {
   onDelete(tx: any) {
     if (confirm(`Are you sure you want to delete transaction: "${tx.description}"?`)) {
       this.transactionService.deleteTransaction(tx.id).subscribe({
-        next: () => {
+        next: (message) => {
+          alert(message);
           this.transactions = this.transactions.filter(t => t.id !== tx.id);
-          this.cdr.detectChanges();
           this.applyFilters();
         },
         error: (err) => {
-          console.error('Error deleting transaction', err);
+          throw new Error(err.message);
         }
       });
     }
@@ -125,27 +124,6 @@ export class Finance implements OnInit {
 
   get balance() {
     return this.totalIncome - this.totalExpense;
-  }
-
-  showErrorPopup(message: string): void {
-    // Create a popup div dynamically
-    const popup = document.createElement('div');
-    popup.style.position = 'fixed';
-    popup.style.top = '50%';
-    popup.style.left = '50%';
-    popup.style.transform = 'translate(-50%, -50%)';
-    popup.style.backgroundColor = '#f8d7da';
-    popup.style.color = '#721c24';
-    popup.style.padding = '20px';
-    popup.style.border = '1px solid #f5c6cb';
-    popup.style.borderRadius = '5px';
-    popup.style.zIndex = '1000';
-    popup.innerHTML = `
-    <h3>Error</h3>
-    <p>${message}</p>
-    <button onclick="this.parentElement.remove()">Close</button>
-    `;
-    document.body.appendChild(popup);
   }
 }
 

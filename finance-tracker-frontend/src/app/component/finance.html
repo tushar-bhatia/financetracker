@@ -60,7 +60,7 @@
 
   <main>
     <div *ngIf="loading" class="loading">Loading transactions...</div>
-    <div *ngIf="loading && filteredTransactions.length === 0" class="empty">No transactions found.</div>
+    <div *ngIf="!loading && filteredTransactions.length === 0" class="empty">No transactions found.</div>
 
     <!-- Desktop Table -->
     <table class="tx-table" *ngIf="!loading && filteredTransactions.length > 0">
