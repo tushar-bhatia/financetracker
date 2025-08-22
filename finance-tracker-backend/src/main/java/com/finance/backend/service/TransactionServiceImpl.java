@@ -44,7 +44,7 @@ public class TransactionServiceImpl implements ITransactionService {
                 .add(TransactionSpecification.hasCategory(transactionRequest.categoryId()))
                 .add(TransactionSpecification.hasDates(transactionRequest.startDate(), transactionRequest.endDate()))
                 .build();
-        List<Transaction> transactions = transactionRepository.findAll(transactionSpecifications, Sort.by(Sort.Direction.ASC, "transactionDate"));
+        List<Transaction> transactions = transactionRepository.findAll(transactionSpecifications, Sort.by(Sort.Direction.DESC, "transactionDate"));
         LOGGER.info("Total trsanctions found: {}", transactions.size());
         return transactions;
     }

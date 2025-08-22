@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  ErrorHandler,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './finance.routes';
@@ -8,6 +13,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
+import { GlobalErrorHandlerService } from '../../error/error-handler-service';
 
 export const financeConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +24,7 @@ export const financeConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideClientHydration(),
     provideHttpClient(),
-    importProvidersFrom(MatIconModule, MatButtonModule, MatSelectModule, MatFormFieldModule)
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
+    importProvidersFrom(MatDialogModule, MatIconModule, MatButtonModule, MatSelectModule, MatFormFieldModule)
   ]
 };

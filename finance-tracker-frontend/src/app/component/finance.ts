@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import {Component, OnInit, HostListener, ChangeDetectorRef, NgModule, ErrorHandler} from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../service/transaction.service';
@@ -8,7 +8,6 @@ import { TransactionRequest } from '../model/transactionRequest.model';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Category } from '../model/category.model';
-
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -43,7 +42,10 @@ export class Finance implements OnInit {
   selectedType: string = '';
   selectedCategory: string = ''
 
-  constructor(private transactionService: TransactionService, private categoryService: CategoryService) {}
+  constructor(private transactionService: TransactionService,
+              private categoryService: CategoryService,
+              private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadTransactions(this.transactionRequest);
@@ -63,7 +65,7 @@ export class Finance implements OnInit {
       next: (data) => {
         this.transactions = data;
         this.applyFilters();
-        this.loading = true;
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error fetching transactions', err);
@@ -90,13 +92,22 @@ export class Finance implements OnInit {
 
   onEdit(tx: any) {
     console.log("Editing transaction:", tx);
+    throw new Error('Method not implemented.');
     // TODO: open edit modal or navigate to edit form
   }
 
   onDelete(tx: any) {
     if (confirm(`Are you sure you want to delete transaction: "${tx.description}"?`)) {
-      console.log("Deleting transaction:", tx);
-      // TODO: call delete API and refresh list
+      this.transactionService.deleteTransaction(tx.id).subscribe({
+        next: () => {
+          this.transactions = this.transactions.filter(t => t.id !== tx.id);
+          this.cdr.detectChanges();
+          this.applyFilters();
+        },
+        error: (err) => {
+          console.error('Error deleting transaction', err);
+        }
+      });
     }
   }
 
@@ -114,6 +125,27 @@ export class Finance implements OnInit {
 
   get balance() {
     return this.totalIncome - this.totalExpense;
+  }
+
+  showErrorPopup(message: string): void {
+    // Create a popup div dynamically
+    const popup = document.createElement('div');
+    popup.style.position = 'fixed';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.backgroundColor = '#f8d7da';
+    popup.style.color = '#721c24';
+    popup.style.padding = '20px';
+    popup.style.border = '1px solid #f5c6cb';
+    popup.style.borderRadius = '5px';
+    popup.style.zIndex = '1000';
+    popup.innerHTML = `
+    <h3>Error</h3>
+    <p>${message}</p>
+    <button onclick="this.parentElement.remove()">Close</button>
+    `;
+    document.body.appendChild(popup);
   }
 }
 
