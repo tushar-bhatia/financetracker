@@ -1,20 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, HostListener } from '@angular/core';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../service/transaction.service';
+import { CategoryService } from '../service/category.service';
 import { Transaction } from '../model/transaction.model';
 import { TransactionRequest } from '../model/transactionRequest.model';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { Category } from '../model/category.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, MatIconButton, MatIcon ],
   templateUrl: './finance.html',
   styleUrls: ['./finance.css'],
 })
 export class Finance implements OnInit {
+  isShrink = false;
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event) {
+    this.isShrink = window.scrollY > 0;
+  };
   transactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
+  categoryData: Category[] = [];
   loading = false;
   transactionRequest: TransactionRequest = {
     id: null,
@@ -28,11 +38,12 @@ export class Finance implements OnInit {
   };
 
   // filters
-  q: string = '';
-  fromMonth: string = '';
-  toMonth: string = '';
+  fromDate: string = '';
+  toDate: string = '';
+  selectedType: string = '';
+  selectedCategory: string = ''
 
-  constructor(private transactionService: TransactionService) {}
+  constructor(private transactionService: TransactionService, private categoryService: CategoryService) {}
 
   ngOnInit(): void {
     this.loadTransactions(this.transactionRequest);
@@ -40,10 +51,18 @@ export class Finance implements OnInit {
 
   loadTransactions(request: TransactionRequest) {
     this.loading = true;
+    this.categoryService.getAllCategories().subscribe({
+      next: (data) => {
+        this.categoryData = data;
+      },
+      error: (err) => {
+        console.error('Error fetching categories', err);
+      },
+    });
     this.transactionService.getAllTransactions(request).subscribe({
       next: (data) => {
         this.transactions = data;
-        //this.applyFilters();
+        this.applyFilters();
         this.loading = true;
       },
       error: (err) => {
@@ -55,27 +74,30 @@ export class Finance implements OnInit {
 
   applyFilters() {
     this.filteredTransactions = this.transactions.filter((tx) => {
-      const query = this.q.toLowerCase();
-      const matchesQuery =
-        !this.q ||
-        tx.description.toLowerCase().includes(query) ||
-        tx.category?.name.toLowerCase().includes(query);
+      const matchesCategory =
+        !this.selectedCategory || tx.category?.name === this.selectedCategory;
 
-      const txDate = new Date(tx.transactionDate);
-      const from = this.fromMonth ? new Date(this.fromMonth + '-01') : null;
-      const to = this.toMonth
-        ? new Date(this.toMonth + '-01')
-        : null;
+      const matchesDate =
+        (!this.fromDate || new Date(tx.transactionDate) >= new Date(this.fromDate)) &&
+        (!this.toDate || new Date(tx.transactionDate) <= new Date(this.toDate));
 
-      let matchesDate = true;
-      if (from && txDate < from) matchesDate = false;
-      if (to) {
-        const toEnd = new Date(to.getFullYear(), to.getMonth() + 1, 0);
-        if (txDate > toEnd) matchesDate = false;
-      }
+      const matchesType =
+        !this.selectedType || tx.transactionType === this.selectedType;
 
-      return matchesQuery && matchesDate;
+      return matchesCategory && matchesDate && matchesType;
     });
+  }
+
+  onEdit(tx: any) {
+    console.log("Editing transaction:", tx);
+    // TODO: open edit modal or navigate to edit form
+  }
+
+  onDelete(tx: any) {
+    if (confirm(`Are you sure you want to delete transaction: "${tx.description}"?`)) {
+      console.log("Deleting transaction:", tx);
+      // TODO: call delete API and refresh list
+    }
   }
 
   get totalIncome() {

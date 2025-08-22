@@ -1,7 +1,7 @@
 <div class="app-container">
-  <header class="app-header">
+  <header class="app-header" [ngClass]="{ 'shrink': isShrink }">
     <div class="logo-title">
-      <img src="../../" alt="Finance Tracker Logo" class="logo" />
+      <img ngSrc="assets/logo.png" alt="Finance Tracker Logo" class="logo" height="1024" width="1024"/>
       <h1>Finance Tracker</h1>
     </div>
     <div class="summary">
@@ -21,21 +21,49 @@
   </header>
 
   <section class="controls">
-    <input type="search" placeholder="Search..." [(ngModel)]="q" (input)="applyFilters()" class="search" />
+    <h2 class="filter-title">Transaction Filters</h2>
 
-    <div class="date-filters">
-      <input type="month" [(ngModel)]="fromMonth" (change)="applyFilters()" />
+    <div class="filters-row">
+
+      <!-- Category Filter -->
+      <div class="filter-field">
+        <label for="category-select">Category</label>
+        <select id="category-select" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+          <option value="">All Categories</option>
+          <option *ngFor="let cat of categoryData" [value]="cat.name">{{ cat.name }}</option>
+        </select>
+      </div>
+
+      <!-- Type Filter -->
+      <div class="filter-field">
+        <label for="type-select">Type</label>
+        <select id="type-select" [(ngModel)]="selectedType" (change)="applyFilters()">
+          <option value="">All Transaction Types</option>
+          <option value="INCOME">Income</option>
+          <option value="EXPENSE">Expense</option>
+        </select>
+      </div>
+
+      <!-- Date Filters -->
+      <div class="date-filter-field">
+        <label for="from-date">From</label>
+        <input type="date" id="from-date" [(ngModel)]="fromDate" (change)="applyFilters()" />
+      </div>
       <span class="dash">—</span>
-      <input type="month" [(ngModel)]="toMonth" (change)="applyFilters()" />
+      <div class="date-filter-field">
+        <label for="to-date">To</label>
+        <input type="date" id="to-date" [(ngModel)]="toDate" (change)="applyFilters()" />
+      </div>
+
     </div>
   </section>
 
   <main>
     <div *ngIf="!loading" class="loading">Loading transactions...</div>
-    <div *ngIf="loading && transactions.length === 0" class="empty">No transactions found.</div>
+    <div *ngIf="loading && filteredTransactions.length === 0" class="empty">No transactions found.</div>
 
     <!-- Desktop Table -->
-    <table class="tx-table" *ngIf="loading && transactions.length > 0">
+    <table class="tx-table" *ngIf="loading && filteredTransactions.length > 0">
       <thead>
       <tr>
         <th>Date</th>
@@ -43,10 +71,11 @@
         <th>Category</th>
         <th class="amount-col">Amount</th>
         <th>Type</th>
+        <th class="actions-col">Actions</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let tx of transactions">
+      <tr *ngFor="let tx of filteredTransactions">
         <td>{{ tx.transactionDate | date:'mediumDate' }}</td>
         <td>{{ tx.description }}</td>
         <td>{{ tx.category?.name }}</td>
@@ -56,12 +85,20 @@
               {{ tx.transactionType }}
             </span>
         </td>
+        <td class="actions-col">
+          <button mat-icon-button class="edit-icon" (click)="onEdit(tx)">
+            <mat-icon fontSet="material-icons-outlined">edit</mat-icon>
+          </button>
+          <button mat-icon-button class="delete-icon" (click)="onDelete(tx)">
+            <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
+          </button>
+        </td>
       </tr>
       </tbody>
     </table>
 
     <!-- Mobile Card View -->
-    <div class="card-list" *ngIf="loading && transactions.length > 0">
+    <div class="card-list" *ngIf="loading && filteredTransactions.length > 0">
       <article class="tx-card" *ngFor="let tx of transactions">
         <div class="card-row top">
           <div class="date">{{ tx.transactionDate | date:'mediumDate' }}</div>
@@ -77,6 +114,14 @@
               {{ tx.transactionType }}
             </span>
           </div>
+        </div>
+        <div class="card-row actions">
+          <button mat-icon-button class="edit-icon" (click)="onEdit(tx)" [disableRipple]="false">
+            <mat-icon fontSet="material-icons-outlined">edit</mat-icon>
+          </button>
+          <button mat-icon-button class="delete-icon" (click)="onDelete(tx)" [disableRipple]="false">
+            <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
+          </button>
         </div>
       </article>
     </div>
