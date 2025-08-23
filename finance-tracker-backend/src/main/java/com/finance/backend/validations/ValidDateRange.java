@@ -1,6 +1,5 @@
 package com.finance.backend.validations;
 
-import com.finance.backend.model.OnFilter;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
