@@ -101,6 +101,19 @@ export class Finance implements OnInit {
     });
   }
 
+  onCreate() {
+    console.log("Creating new transaction");
+    let newTransaction: Transaction = {
+      id: null,
+      transactionDate: '',
+      amount: null,
+      category: { id: null, name: '' },
+      transactionType: '',
+      description: ''
+    };
+    this.openDialog(newTransaction, 'create');
+  }
+
   onEdit(tx: Transaction) {
     console.log("Editing transaction:", tx);
     let transactionCopy: Transaction = structuredClone<Transaction>(tx)
