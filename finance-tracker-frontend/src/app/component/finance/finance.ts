@@ -189,8 +189,9 @@ export class Finance implements OnInit {
       description: tx.description
     };
     this.transactionService.createTransaction(transactionRequest).subscribe({
-      next: (updatedTx) => {
-        this.transactions.push(updatedTx);
+      next: (newTransaction) => {
+        this.transactions = [newTransaction, ...this.transactions];
+        alert("Transaction created successfully!");
         this.applyFilters();
       },
       error: (err) => {
@@ -229,6 +230,14 @@ export class Finance implements OnInit {
     this.modalMode = mode;
     this.selectedTransaction = tx;
     this.isVisible = true;
+  }
+
+  onViewAnalysis() {
+
+  }
+
+  onDownloadReport() {
+
   }
 }
 

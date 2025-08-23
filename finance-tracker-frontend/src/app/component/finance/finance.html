@@ -20,43 +20,54 @@
     </div>
   </header>
 
-  <section class="controls">
-    <h2 class="filter-title">Transaction Filters</h2>
+  <section class="controls-container">
+    <!-- Filters Block -->
+    <div class="filters-block">
+      <h2 class="filter-title">Transaction Filters</h2>
+      <div class="filters-row">
+        <!-- Category Filter -->
+        <div class="filter-field">
+          <label for="category-select">Category</label>
+          <select id="category-select" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+            <option value="">All Categories</option>
+            <option *ngFor="let cat of categoryData" [value]="cat.name">{{ cat.name }}</option>
+          </select>
+        </div>
 
-    <div class="filters-row">
+        <!-- Type Filter -->
+        <div class="filter-field">
+          <label for="type-select">Type</label>
+          <select id="type-select" [(ngModel)]="selectedType" (change)="applyFilters()">
+            <option value="">All Transaction Types</option>
+            <option value="INCOME">Income</option>
+            <option value="EXPENSE">Expense</option>
+          </select>
+        </div>
 
-      <!-- Category Filter -->
-      <div class="filter-field">
-        <label for="category-select">Category</label>
-        <select id="category-select" [(ngModel)]="selectedCategory" (change)="applyFilters()">
-          <option value="">All Categories</option>
-          <option *ngFor="let cat of categoryData" [value]="cat.name">{{ cat.name }}</option>
-        </select>
+        <!-- Date Filters -->
+        <div class="date-filter-field">
+          <label for="from-date">From</label>
+          <input type="date" id="from-date" [(ngModel)]="fromDate" (change)="applyFilters()" />
+        </div>
+        <span class="dash">—</span>
+        <div class="date-filter-field">
+          <label for="to-date">To</label>
+          <input type="date" id="to-date" [(ngModel)]="toDate" (change)="applyFilters()" />
+        </div>
       </div>
+    </div>
 
-      <!-- Type Filter -->
-      <div class="filter-field">
-        <label for="type-select">Type</label>
-        <select id="type-select" [(ngModel)]="selectedType" (change)="applyFilters()">
-          <option value="">All Transaction Types</option>
-          <option value="INCOME">Income</option>
-          <option value="EXPENSE">Expense</option>
-        </select>
+    <!-- Controls Block -->
+    <div class="actions-block">
+      <h2 class="filter-title">Controls</h2>
+      <div class="actions-row">
+        <button class="btn primary" (click)="onCreate()">Add Transaction</button>
+        <button class="btn secondary" (click)="onViewAnalysis()">View Analysis</button>
+        <button class="btn secondary" (click)="onDownloadReport()">Download Report</button>
       </div>
-
-      <!-- Date Filters -->
-      <div class="date-filter-field">
-        <label for="from-date">From</label>
-        <input type="date" id="from-date" [(ngModel)]="fromDate" (change)="applyFilters()" />
-      </div>
-      <span class="dash">—</span>
-      <div class="date-filter-field">
-        <label for="to-date">To</label>
-        <input type="date" id="to-date" [(ngModel)]="toDate" (change)="applyFilters()" />
-      </div>
-
     </div>
   </section>
+
 
   <main>
     <div *ngIf="loading" class="loading">Loading transactions...</div>
