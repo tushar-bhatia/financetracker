@@ -1,9 +1,9 @@
 import { Category } from './category.model';
 
 export interface Transaction {
-  id: number,
+  id: number | null,
   transactionDate: string;
-  amount: number;
+  amount: number | null;
   category: Category;
   transactionType: string;
   description: string;

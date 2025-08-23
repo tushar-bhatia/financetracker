@@ -78,7 +78,7 @@
       <tr *ngFor="let tx of filteredTransactions">
         <td>{{ tx.transactionDate | date:'mediumDate' }}</td>
         <td>{{ tx.description }}</td>
-        <td>{{ tx.category?.name }}</td>
+        <td>{{ tx.category.name }}</td>
         <td class="amount-col">{{ tx.amount | currency:'INR':'symbol' }}</td>
         <td>
             <span class="badge" [ngClass]="{income: tx.transactionType === 'INCOME', expense: tx.transactionType === 'EXPENSE'}">
@@ -127,3 +127,12 @@
     </div>
   </main>
 </div>
+
+<transaction-dialog
+  [visible]="isVisible"
+  [mode]="modalMode"
+  [transaction]="selectedTransaction"
+  [categories]="categoryData"
+  (close)="closeDialog()"
+  (save)="onUserAction($event)">
+</transaction-dialog>

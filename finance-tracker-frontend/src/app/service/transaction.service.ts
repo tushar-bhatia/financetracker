@@ -47,7 +47,7 @@ export class TransactionService {
   /**
    * Optional: Delete transaction
    */
-  deleteTransaction(id: number): Observable<string> {
+  deleteTransaction(id: number | null): Observable<string> {
     return this.http.delete<string>(`${this.apiUrl}/${environment.delete}/${id}`, { responseType: 'text' as 'json' });
   }
 

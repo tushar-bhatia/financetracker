@@ -1,0 +1,42 @@
+<div class="modal-overlay" *ngIf="visible">
+  <div class="modal-container">
+    <!-- Header -->
+    <div class="modal-header">
+      <h2>{{ mode === 'create' ? 'Create Transaction' : 'Edit Transaction' }}</h2>
+      <button class="close-btn" (click)="onCancel()">×</button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <form>
+        <label>Date</label>
+        <input type="date" [(ngModel)]="transaction.transactionDate" name="date" />
+
+        <label>Description</label>
+        <input type="text" [(ngModel)]="transaction.description" name="description" />
+
+        <label>Amount</label>
+        <input type="number" [(ngModel)]="transaction.amount" name="amount" />
+
+        <label>Category</label>
+        <select [(ngModel)]="transaction.category" [compareWith]="compareCategory" name="category">
+          <option *ngFor="let cat of categories" [ngValue]="cat">{{ cat.name }}</option>
+        </select>
+
+        <label>Transaction Type</label>
+        <select [(ngModel)]="transaction.transactionType" name="transactionType">
+          <option value="INCOME">Income</option>
+          <option value="EXPENSE">Expense</option>
+        </select>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn cancel" (click)="onCancel()">Cancel</button>
+      <button class="btn save" (click)="onSave()">
+        {{ mode === 'create' ? 'Create' : 'Update' }}
+      </button>
+    </div>
+  </div>
+</div>
