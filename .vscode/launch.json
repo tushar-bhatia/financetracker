@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "FrontendApplication",
+            "url": "http://localhost:4200",
+            "request": "launch",
+            "sourceMaps": true,
+            "preLaunchTask": "npm: start",
+            "type": "chrome",
+            "webRoot": "${workspaceFolder}/finance-tracker-frontend/src"
+        },
+        {
+            "type": "java",
+            "name": "BackendApplication",
+            "request": "launch",
+            "mainClass": "com.finance.backend.BackendApplication",
+            "projectName": "finance-tracker-backend"
+        }
+    ]
+}

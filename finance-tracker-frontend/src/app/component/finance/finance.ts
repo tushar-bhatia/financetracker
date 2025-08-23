@@ -31,7 +31,8 @@ export class Finance implements OnInit {
   fromDate: string = '';
   toDate: string = '';
   selectedType: string = '';
-  selectedCategory: string = ''
+  selectedCategory!: Category;
+  allCategoryOption: Category = { id: 0, name: 'All Category' };
 
   // modal parameters
   isVisible: boolean = false;
@@ -68,6 +69,7 @@ export class Finance implements OnInit {
     this.categoryService.getAllCategories().subscribe({
       next: (data) => {
         this.categoryData = data;
+        this.selectedCategory = this.allCategoryOption ;
       },
       error: (err) => {
         throw new Error("Error fetching categories:" + err.message);
@@ -88,7 +90,7 @@ export class Finance implements OnInit {
   applyFilters() {
     this.filteredTransactions = this.transactions.filter((tx) => {
       const matchesCategory =
-        !this.selectedCategory || tx.category?.name === this.selectedCategory;
+        this.selectedCategory.id === 0 || tx.category?.id === this.selectedCategory.id;
 
       const matchesDate =
         (!this.fromDate || new Date(tx.transactionDate) >= new Date(this.fromDate)) &&
@@ -197,7 +199,7 @@ export class Finance implements OnInit {
       error: (err) => {
         throw new Error("Error adding new transaction:" + err.message);
       }
-    })
+    });
   }
 
   onUserAction(tx: Transaction) {
@@ -237,7 +239,42 @@ export class Finance implements OnInit {
   }
 
   onDownloadReport() {
+    let transactionRequest: TransactionRequest = {
+      id: null,
+      categoryId: this.selectedCategory.id===0 ? null : this.selectedCategory.id,
+      transactionType: this.selectedType==='' ? null : this.selectedType,
+      startDate: this.fromDate==='' ? null : this.fromDate,
+      endDate: this.toDate==='' ? null : this.toDate,
+      transactionDate: null,
+      amount: null,
+      description: null,
+    }
+    this.transactionService.getFinanceReport(transactionRequest).subscribe({
+      next: (response) => {
+        let header = response.headers.get('Content-Disposition') || 'attachment; filename=finance_report.xlsx';
+        let filenameMatch = header.match(/filename="?([^"]+)"?/);
+        let filename = filenameMatch ? filenameMatch[1] : 'finance_report.xlsx';
+        this.downloadReport(response.body, filename);
+      },
+      error: (err) => {
+        throw new Error("Error generating the transaction report:" + err.message);
+      }
+    });
+  }
 
+  downloadReport(blob: Blob|null, filename: string) {
+    if (!blob) {
+      alert("No data available for the report generation.");
+      return;
+    }
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 }
 

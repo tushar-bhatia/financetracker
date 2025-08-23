@@ -29,8 +29,8 @@
         <div class="filter-field">
           <label for="category-select">Category</label>
           <select id="category-select" [(ngModel)]="selectedCategory" (change)="applyFilters()">
-            <option value="">All Categories</option>
-            <option *ngFor="let cat of categoryData" [value]="cat.name">{{ cat.name }}</option>
+            <option [ngValue]="allCategoryOption">All Categories</option>
+            <option *ngFor="let cat of categoryData" [ngValue]="cat">{{ cat.name }}</option>
           </select>
         </div>
 
@@ -59,7 +59,7 @@
 
     <!-- Controls Block -->
     <div class="actions-block">
-      <h2 class="filter-title">Controls</h2>
+      <h2 class="filter-title">Transaction Controls</h2>
       <div class="actions-row">
         <button class="btn primary" (click)="onCreate()">Add Transaction</button>
         <button class="btn secondary" (click)="onViewAnalysis()">View Analysis</button>

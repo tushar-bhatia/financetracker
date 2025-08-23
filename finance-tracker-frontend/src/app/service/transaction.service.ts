@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Transaction } from '../model/transaction.model';
 import { TransactionRequest } from '../model/transactionRequest.model';
@@ -61,7 +61,7 @@ export class TransactionService {
   /**
    * Optional: Get report of your finances
    */
-  getFinanceReport(transactionRequest: TransactionRequest): Observable<Blob> {
-    return this.http.post<Blob>(`${this.apiUrl}/${environment.report}`, transactionRequest);
+  getFinanceReport(transactionRequest: TransactionRequest): Observable<HttpResponse<Blob>> {
+    return this.http.post<Blob>(`${this.apiUrl}/${environment.report}`, transactionRequest, {responseType: 'blob' as 'json', observe: 'response' });
   }
 }
