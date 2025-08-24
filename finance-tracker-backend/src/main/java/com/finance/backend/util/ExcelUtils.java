@@ -144,9 +144,8 @@ public class ExcelUtils {
             expenseValueCell.setCellStyle(dataStyle);
             counter++;
         }
-        for(int i=0; i<5; i++) {
+        for(int i=0; i<5 && categoryExpenses.size()>1; i++) {
             sheet.addMergedRegion(new CellRangeAddress(endRow.getRowNum()-categoryExpenses.size()+1, endRow.getRowNum(), i, i));
-
         }
         return rowNumber;
     }
