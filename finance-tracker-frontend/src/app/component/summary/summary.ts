@@ -13,12 +13,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./summary.css']
 })
 export class TransactionSummary implements OnInit {
-  data!: Map<string, FinanceSummary>;
+  summary!: Map<string, FinanceSummary>;
 
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state && navigation.extras.state['data']) {
-      this.data = navigation.extras.state['data'] as Map<string, FinanceSummary>;
+      let data = navigation.extras.state['data'] as Map<string, FinanceSummary>;
+      this.summary = new Map(Object.entries(data));
+      console.log(this.summary);
     }
   }
 
@@ -38,16 +40,16 @@ export class TransactionSummary implements OnInit {
   };
 
   ngOnInit() {
-    if (!this.data) return;
+    if (!this.summary) return;
 
-    this.months = Object.keys(this.data);
+    this.months = Array.from(this.summary.keys()).sort();
 
     // Income vs Expense Bar Chart
     this.incomeExpenseData = {
       labels: this.months,
       datasets: [
-        { data: this.months.map(m => this.data.get(m)!.income), label: 'Income' },
-        { data: this.months.map(m => this.data.get(m)!.expense), label: 'Expense' }
+        { data: this.months.map(m => this.summary.get(m)!.income), label: 'Income' },
+        { data: this.months.map(m => this.summary.get(m)!.expense), label: 'Expense' }
       ]
     };
 
@@ -55,14 +57,14 @@ export class TransactionSummary implements OnInit {
     this.balanceData = {
       labels: this.months,
       datasets: [
-        { data: this.months.map(m => this.data.get(m)!.balance), label: 'Balance', fill: true, borderColor: '#4CAF50', backgroundColor: 'rgba(76, 175, 80, 0.2)' }
+        { data: this.months.map(m => this.summary.get(m)!.balance), label: 'Balance', fill: true, borderColor: '#4CAF50', backgroundColor: 'rgba(76, 175, 80, 0.2)' }
       ]
     };
   }
 
   selectMonth(month: string) {
     this.selectedMonth = month;
-    const cat = this.data.get(month)!.categoryExpense;
+    const cat = this.summary.get(month)!.categoryExpense;
     this.categoryData = {
       labels: Object.keys(cat),
       datasets: [

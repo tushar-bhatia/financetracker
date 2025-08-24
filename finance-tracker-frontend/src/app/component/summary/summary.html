@@ -14,44 +14,25 @@
           (click)="selectMonth(month)"
           class="cursor-pointer hover:bg-gray-50 transition">
         <td class="border px-2 md:px-4 py-2 font-medium">{{ month }}</td>
-        <td class="border px-2 md:px-4 py-2">{{ data.get(month)!.income | currency:'INR' }}</td>
-        <td class="border px-2 md:px-4 py-2 text-red-600">{{ data.get(month)!.expense | currency:'INR' }}</td>
-        <td class="border px-2 md:px-4 py-2 text-green-600">{{ data.get(month)!.balance | currency:'INR' }}</td>
+        <td class="border px-2 md:px-4 py-2">{{ summary.get(month)!.income | currency:'INR' }}</td>
+        <td class="border px-2 md:px-4 py-2 text-red-600">{{ summary.get(month)!.expense | currency:'INR' }}</td>
+        <td class="border px-2 md:px-4 py-2 text-green-600">{{ summary.get(month)!.balance | currency:'INR' }}</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<!-- Charts Section -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-  
-  <!-- Income vs Expense Bar Chart -->
-  <div class="p-4 rounded-xl shadow bg-white">
-    <h2 class="text-lg font-semibold mb-2">Income vs Expense</h2>
-    <canvas baseChart
-      [data]="incomeExpenseData"
-      [options]="chartOptions"
-      chartType="bar">
-    </canvas>
-  </div>
-
-  <!-- Balance Growth Line Chart -->
-  <div class="p-4 rounded-xl shadow bg-white">
-    <h2 class="text-lg font-semibold mb-2">Balance Growth</h2>
-    <canvas baseChart
-      [data]="balanceData"
-      [options]="chartOptions"
-      chartType="line">
-    </canvas>
-  </div>
+<div class="chart-card">
+  <h2>Income vs Expense</h2>
+  <canvas baseChart [data]="incomeExpenseData" [options]="chartOptions" chartType="bar"></canvas>
 </div>
 
-<!-- Category Expense Pie Chart -->
-<div *ngIf="selectedMonth" class="mt-6 p-4 rounded-xl shadow bg-white">
-  <h2 class="text-lg font-semibold mb-2">Category Expenses - {{ selectedMonth }}</h2>
-  <canvas baseChart
-    [data]="categoryData"
-    [options]="chartOptions"
-    chartType="pie">
-  </canvas>
+<div class="chart-card">
+  <h2>Balance Growth</h2>
+  <canvas baseChart [data]="balanceData" [options]="chartOptions" chartType="line"></canvas>
+</div>
+
+<div *ngIf="selectedMonth" class="category-chart">
+  <h2>Category Expenses - {{ selectedMonth }}</h2>
+  <canvas baseChart [data]="categoryData" [options]="chartOptions" chartType="pie"></canvas>
 </div>

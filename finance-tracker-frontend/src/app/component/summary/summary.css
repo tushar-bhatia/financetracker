@@ -1,33 +1,78 @@
-.table-container {
-  overflow-x: auto;
+/* ----------------- Finance Summary Custom Styling ----------------- */
+
+/* Table Styling */
+table {
+  border-radius: 0.75rem; /* smooth rounded corners */
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.table {
-  min-width: 600px; /* force horizontal scroll on mobile */
-  font-size: 0.875rem; /* smaller font on small screens */
+th {
+  font-weight: 600;
+  color: #374151; /* gray-700 */
+  text-align: left;
 }
 
-@media (min-width: 768px) {
-  .table {
-    font-size: 1rem;
-  }
+td {
+  color: #1f2937; /* gray-800 */
 }
 
-.charts-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+/* Row hover effect */
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+tbody tr:hover {
+  background-color: #f9fafb; /* subtle hover */
 }
 
-@media (min-width: 768px) {
-  .charts-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+/* Chart Card Styling */
+.chart-card {
+  background: #ffffff;
+  border-radius: 1rem; /* xl */
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card {
-  background: #fff;
+.chart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+/* Headings */
+.chart-card h2 {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #111827; /* gray-900 */
+}
+
+/* Pie chart section */
+.category-chart {
+  margin-top: 1.5rem;
+  background: #ffffff;
   border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.category-chart h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #111827;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.875rem; /* smaller text on mobile */
+  }
+  .chart-card {
+    padding: 1rem;
+  }
+  .category-chart {
+    padding: 1rem;
+  }
 }
