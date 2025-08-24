@@ -26,25 +26,28 @@
   </div>
 
   <!-- Charts Section -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    
-    <!-- Income vs Expense -->
-    <div class="card">
-      <h2 class="card-title">Income vs Expense</h2>
-      <canvas baseChart [data]="incomeExpenseData" [options]="chartOptions" chartType="bar"></canvas>
-    </div>
-
-    <!-- Balance Growth -->
-    <div class="card">
-      <h2 class="card-title">Balance Growth</h2>
-      <canvas baseChart [data]="balanceData" [options]="chartOptions" chartType="line"></canvas>
-    </div>
+  <!-- Income vs Expense -->
+<div class="card">
+  <h2 class="card-title">Income vs Expense</h2>
+  <div class="chart-wrapper">
+    <canvas baseChart [data]="incomeExpenseData" [options]="chartOptions" [type]="incomeExpenseChartType"></canvas>
   </div>
+</div>
 
-  <!-- Category Expense -->
-  <div *ngIf="selectedMonth" class="card">
-    <h2 class="card-title">Category Expenses - {{ selectedMonth }}</h2>
-    <canvas baseChart [data]="categoryData" [options]="chartOptions" chartType="pie"></canvas>
+<!-- Balance Growth -->
+<div class="card">
+  <h2 class="card-title">Balance Growth</h2>
+  <div class="chart-wrapper">
+    <canvas baseChart [data]="balanceData" [options]="chartOptions" [type]="balanceChartType"></canvas>
   </div>
+</div>
+
+<!-- Category Expense -->
+<div *ngIf="selectedMonth" class="card">
+  <h2 class="card-title">Category Expenses - {{ selectedMonth }}</h2>
+  <div class="chart-wrapper">
+    <canvas baseChart [data]="categoryData" [options]="chartOptions" [type]="categoryChartType"></canvas>
+  </div>
+</div>
 
 </div>

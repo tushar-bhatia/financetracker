@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ChartData, ChartOptions } from 'chart.js';
+import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { CommonModule } from '@angular/common';
 import { FinanceSummary } from '../../model/financeSummary.model';
 import { BaseChartDirective } from 'ng2-charts';
@@ -26,6 +26,11 @@ export class TransactionSummary implements OnInit {
 
   months: string[] = [];
   selectedMonth: string | null = null;
+
+  // chart types
+  incomeExpenseChartType: ChartType = 'bar';
+  balanceChartType: ChartType = 'line';
+  categoryChartType: ChartType = 'pie';
 
   // Charts
   incomeExpenseData: ChartData<'bar'> = { labels: [], datasets: [] };
