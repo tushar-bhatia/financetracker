@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { financeConfig } from './app/component/finance/finance.config';
-import { Finance } from './app/component/finance/finance';
+import { appConfig } from './app/component/root/app.config';
+import { AppComponent } from './app/component/root/app.component';
 
-bootstrapApplication(Finance, financeConfig)
+bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));

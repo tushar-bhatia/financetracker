@@ -108,7 +108,7 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/summary")
+    @PostMapping("/summary")
     public ResponseEntity<?> getMonthlyTransactionSummary(@Validated(OnFilter.class) @RequestBody(required = false) TransactionRequest transactionRequest) {
         LOGGER.info("Request received to display monthly transaction summary");
         try {

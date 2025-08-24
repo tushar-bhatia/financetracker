@@ -1,0 +1,33 @@
+.table-container {
+  overflow-x: auto;
+}
+
+.table {
+  min-width: 600px; /* force horizontal scroll on mobile */
+  font-size: 0.875rem; /* smaller font on small screens */
+}
+
+@media (min-width: 768px) {
+  .table {
+    font-size: 1rem;
+  }
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}

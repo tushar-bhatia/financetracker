@@ -1,0 +1,57 @@
+<!-- Monthly Table -->
+<div class="overflow-x-auto mb-6">
+  <table class="min-w-full border-collapse border border-gray-300 text-sm md:text-base">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="border px-2 md:px-4 py-2">Month</th>
+        <th class="border px-2 md:px-4 py-2">Income</th>
+        <th class="border px-2 md:px-4 py-2">Expense</th>
+        <th class="border px-2 md:px-4 py-2">Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let month of months"
+          (click)="selectMonth(month)"
+          class="cursor-pointer hover:bg-gray-50 transition">
+        <td class="border px-2 md:px-4 py-2 font-medium">{{ month }}</td>
+        <td class="border px-2 md:px-4 py-2">{{ data.get(month)!.income | currency:'INR' }}</td>
+        <td class="border px-2 md:px-4 py-2 text-red-600">{{ data.get(month)!.expense | currency:'INR' }}</td>
+        <td class="border px-2 md:px-4 py-2 text-green-600">{{ data.get(month)!.balance | currency:'INR' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Charts Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+  <!-- Income vs Expense Bar Chart -->
+  <div class="p-4 rounded-xl shadow bg-white">
+    <h2 class="text-lg font-semibold mb-2">Income vs Expense</h2>
+    <canvas baseChart
+      [data]="incomeExpenseData"
+      [options]="chartOptions"
+      chartType="bar">
+    </canvas>
+  </div>
+
+  <!-- Balance Growth Line Chart -->
+  <div class="p-4 rounded-xl shadow bg-white">
+    <h2 class="text-lg font-semibold mb-2">Balance Growth</h2>
+    <canvas baseChart
+      [data]="balanceData"
+      [options]="chartOptions"
+      chartType="line">
+    </canvas>
+  </div>
+</div>
+
+<!-- Category Expense Pie Chart -->
+<div *ngIf="selectedMonth" class="mt-6 p-4 rounded-xl shadow bg-white">
+  <h2 class="text-lg font-semibold mb-2">Category Expenses - {{ selectedMonth }}</h2>
+  <canvas baseChart
+    [data]="categoryData"
+    [options]="chartOptions"
+    chartType="pie">
+  </canvas>
+</div>

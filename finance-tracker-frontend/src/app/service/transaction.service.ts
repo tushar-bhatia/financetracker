@@ -54,8 +54,8 @@ export class TransactionService {
   /**
    * Optional: Get financial summary of your transactions
    */
-  getFinancialSummary(): Observable<Map<string, FinanceSummary>> {
-    return this.http.get<Map<string, FinanceSummary>>(`${this.apiUrl}/${environment.summary}`);
+  getFinancialSummary(transactionRequest: TransactionRequest): Observable<Map<string, FinanceSummary>> {
+    return this.http.post<Map<string, FinanceSummary>>(`${this.apiUrl}/${environment.summary}`, transactionRequest);
   }
 
   /**

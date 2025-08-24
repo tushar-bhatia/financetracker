@@ -9,8 +9,11 @@ import { TransactionModal } from '../dailog/transaction-modal';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Category } from '../../model/category.model';
+import { FinanceSummary } from '../../model/financeSummary.model';
+import { Router } from '@angular/router';
+
 @Component({
-  selector: 'app-root',
+  selector: 'finance-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule, NgOptimizedImage, MatIconButton, MatIcon, TransactionModal],
   templateUrl: './finance.html',
@@ -47,7 +50,8 @@ export class Finance implements OnInit {
   };
 
   constructor(private transactionService: TransactionService,
-              private categoryService: CategoryService
+              private categoryService: CategoryService,
+              private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -235,7 +239,24 @@ export class Finance implements OnInit {
   }
 
   onViewAnalysis() {
-
+    let transactionRequest: TransactionRequest = {
+      id: null,
+      categoryId: this.selectedCategory.id===0 ? null : this.selectedCategory.id,
+      transactionType: this.selectedType==='' ? null : this.selectedType,
+      startDate: this.fromDate==='' ? null : this.fromDate,
+      endDate: this.toDate==='' ? null : this.toDate,
+      transactionDate: null,
+      amount: null,
+      description: null,
+    };
+    this.transactionService.getFinancialSummary(transactionRequest).subscribe({
+      next: (summary: Map<string, FinanceSummary>) => {
+        this.router.navigate(['/summary'], { state: { data: summary } });
+      },
+      error: (err) => {
+        throw new Error("Error generating the financial summary:" + err.message);
+      }
+    });
   }
 
   onDownloadReport() {
