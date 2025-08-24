@@ -414,4 +414,14 @@ button.delete-icon:hover mat-icon {
     gap: 1rem;
     padding: 1rem;
   }
+
+  .actions-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions-row .btn {
+    min-width: 100%;
+    width: 100%;
+  }
 }

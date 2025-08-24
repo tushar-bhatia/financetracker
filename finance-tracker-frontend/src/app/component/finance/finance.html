@@ -109,7 +109,7 @@
     </table>
 
     <!-- Mobile Card View -->
-    <div class="card-list" *ngIf="loading && filteredTransactions.length > 0">
+    <div class="card-list" *ngIf="!loading && filteredTransactions.length > 0">
       <article class="tx-card" *ngFor="let tx of transactions">
         <div class="card-row top">
           <div class="date">{{ tx.transactionDate | date:'mediumDate' }}</div>
