@@ -1,78 +1,88 @@
-/* ----------------- Finance Summary Custom Styling ----------------- */
+/* ---------------- Finance Dashboard Styling ---------------- */
 
-/* Table Styling */
-table {
-  border-radius: 0.75rem; /* smooth rounded corners */
-  overflow: hidden;
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-th {
-  font-weight: 600;
-  color: #374151; /* gray-700 */
-  text-align: left;
-}
-
-td {
-  color: #1f2937; /* gray-800 */
-}
-
-/* Row hover effect */
-tbody tr {
-  transition: background-color 0.2s ease;
-}
-tbody tr:hover {
-  background-color: #f9fafb; /* subtle hover */
-}
-
-/* Chart Card Styling */
-.chart-card {
-  background: #ffffff;
-  border-radius: 1rem; /* xl */
+.finance-dashboard {
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background-color: #f9fafb;
+}
+
+/* Reusable card container */
+.card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.chart-card:hover {
+.card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0,0,0,0.1);
 }
 
-/* Headings */
-.chart-card h2 {
-  font-size: 1.125rem; /* text-lg */
+/* Card Title */
+.card-title {
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: #111827; /* gray-900 */
-}
-
-/* Pie chart section */
-.category-chart {
-  margin-top: 1.5rem;
-  background: #ffffff;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.category-chart h2 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
   color: #111827;
+  margin-bottom: 1rem;
 }
 
-/* Responsive tweaks */
+/* Table Styling */
+.finance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.finance-table th,
+.finance-table td {
+  border-bottom: 1px solid #e5e7eb; /* gray-200 */
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.finance-table thead {
+  background-color: #f3f4f6; /* gray-100 */
+}
+
+.finance-table th {
+  font-weight: 600;
+  color: #374151; /* gray-700 */
+}
+
+.finance-table tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.finance-table tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Finance Numbers */
+.text-expense {
+  color: #dc2626; /* red-600 */
+  font-weight: 500;
+}
+
+.text-income {
+  color: #16a34a; /* green-600 */
+  font-weight: 500;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-  table {
-    font-size: 0.875rem; /* smaller text on mobile */
-  }
-  .chart-card {
+  .card {
     padding: 1rem;
   }
-  .category-chart {
-    padding: 1rem;
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .finance-table th,
+  .finance-table td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
   }
 }
