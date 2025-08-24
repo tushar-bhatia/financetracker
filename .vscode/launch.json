@@ -9,7 +9,7 @@
             "url": "http://localhost:4200",
             "request": "launch",
             "sourceMaps": true,
-            "preLaunchTask": "npm: start",
+            "preLaunchTask": "npm start",
             "type": "chrome",
             "webRoot": "${workspaceFolder}/finance-tracker-frontend/src"
         },

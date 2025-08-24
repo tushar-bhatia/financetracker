@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Component
 public class ExcelReportGenerator implements IReportGenerator {
@@ -81,13 +83,25 @@ public class ExcelReportGenerator implements IReportGenerator {
         XDDFChartLegend legend = chart.getOrAddLegend();
         legend.setPosition(LegendPosition.RIGHT);
 
-        XDDFDataSource<String> categories = XDDFDataSourcesFactory.fromArray(new String[]{"Income", "Expense"});
-        double totalIncome = 0, totalExpense = 0;
+        double totalIncome = 0;
         for (FinanceSummary fs : summary.values()) {
             totalIncome += fs.income();
-            totalExpense += fs.expense();
         }
-        XDDFNumericalDataSource<Double> values = XDDFDataSourcesFactory.fromArray(new Double[]{totalIncome, totalExpense});
+        Map<String, Double> categoryExpenses = summary.values().stream().map(s -> s.categoryExpense()).collect(Collectors.toList()).stream().flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.groupingBy(e -> e.getKey(), Collectors.summingDouble(e -> e.getValue())));
+        String[] categoriesArray = new String[categoryExpenses.size() + 1];
+        Double[] valuesArray = new Double[categoryExpenses.size() + 1];
+        categoriesArray[0] = "INCOME";
+        valuesArray[0] = totalIncome;
+        int index = 1;
+        for(Map.Entry<String, Double> entry : categoryExpenses.entrySet()) {
+            categoriesArray[index] = entry.getKey();
+            valuesArray[index] = entry.getValue();
+            index++;
+        }
+
+        XDDFDataSource<String> categories = XDDFDataSourcesFactory.fromArray(categoriesArray);
+        XDDFNumericalDataSource<Double> values = XDDFDataSourcesFactory.fromArray(valuesArray);
 
         XDDFChartData data = chart.createData(ChartTypes.PIE, null, null);
         XDDFChartData.Series series = data.addSeries(categories, values);
