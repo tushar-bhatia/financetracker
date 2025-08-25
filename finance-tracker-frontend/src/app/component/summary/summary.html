@@ -1,9 +1,12 @@
-<div class="finance-dashboard space-y-8">
+<div class="finance-dashboard">
 
   <!-- Monthly Finance Table -->
-  <div class="card">
-    <h2 class="card-title">Monthly Overview</h2>
-    <div class="overflow-x-auto">
+  <section class="card">
+    <header class="card-header">
+      <h2 class="card-title">📊 Monthly Overview</h2>
+    </header>
+
+    <div class="table-container">
       <table class="finance-table">
         <thead>
           <tr>
@@ -11,43 +14,62 @@
             <th>Income</th>
             <th>Expense</th>
             <th>Balance</th>
+            <th>Details</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let month of months" (click)="selectMonth(month)">
+          <tr *ngFor="let month of months">
             <td class="font-medium">{{ month }}</td>
-            <td>{{ summary.get(month)!.income | currency:'INR' }}</td>
+            <td class="text-income">{{ summary.get(month)!.income | currency:'INR' }}</td>
             <td class="text-expense">{{ summary.get(month)!.expense | currency:'INR' }}</td>
-            <td class="text-income">{{ summary.get(month)!.balance | currency:'INR' }}</td>
+            <td [ngClass]="summary.get(month)!.balance >= 0 ? 'text-positive' : 'text-negative'">
+              {{ summary.get(month)!.balance | currency:'INR' }}
+            </td>
+            <td>
+              <button class="icon-btn" title="View Category Breakdown" (click)="openCategoryChart(month)">
+                👁
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
+  </section>
 
   <!-- Charts Section -->
-  <!-- Income vs Expense -->
-<div class="card">
-  <h2 class="card-title">Income vs Expense</h2>
-  <div class="chart-wrapper">
-    <canvas baseChart [data]="incomeExpenseData" [options]="chartOptions" [type]="incomeExpenseChartType"></canvas>
-  </div>
-</div>
+  <section class="card">
+    <header class="card-header">
+      <h2 class="card-title">📈 Analytics</h2>
+    </header>
 
-<!-- Balance Growth -->
-<div class="card">
-  <h2 class="card-title">Balance Growth</h2>
-  <div class="chart-wrapper">
-    <canvas baseChart [data]="balanceData" [options]="chartOptions" [type]="balanceChartType"></canvas>
-  </div>
-</div>
+    <div class="chart-grid">
+      <!-- Income vs Expense -->
+      <div class="chart-wrapper">
+        <h3 class="chart-title">Income vs Expense</h3>
+        <canvas baseChart [data]="incomeExpenseData" [options]="chartOptions" chartType="bar"></canvas>
+      </div>
 
-<!-- Category Expense -->
-<div *ngIf="selectedMonth" class="card">
-  <h2 class="card-title">Category Expenses - {{ selectedMonth }}</h2>
-  <div class="chart-wrapper">
-    <canvas baseChart [data]="categoryData" [options]="chartOptions" [type]="categoryChartType"></canvas>
+      <!-- Balance Growth -->
+      <div class="chart-wrapper">
+        <h3 class="chart-title">Balance Growth</h3>
+        <canvas baseChart [data]="balanceData" [options]="chartOptions" chartType="line"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal for Category Expense Pie Chart -->
+  <div class="modal" *ngIf="selectedMonth">
+    <div class="modal-overlay" (click)="closeCategoryChart()"></div>
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>Category Expenses - {{ selectedMonth }}</h2>
+        <button class="close-btn" (click)="closeCategoryChart()">&times;</button>
+      </header>
+
+      <div class="chart-wrapper">
+        <canvas baseChart [data]="categoryData" [options]="chartOptions" chartType="pie"></canvas>
+      </div>
+    </div>
   </div>
-</div>
 
 </div>
