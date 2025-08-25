@@ -8,35 +8,84 @@
 
     <!-- Body -->
     <div class="modal-body">
-      <form>
+      <form #transactionForm="ngForm" (ngSubmit)="onSave()" novalidate>
+        
+        <!-- Date -->
         <label>Date</label>
-        <input type="date" [(ngModel)]="transaction.transactionDate" name="date" />
+        <input 
+          type="date" 
+          [(ngModel)]="transaction.transactionDate" 
+          name="date" 
+          required
+          #dateCtrl="ngModel" />
+        <div class="error" *ngIf="dateCtrl.invalid && dateCtrl.touched">
+          Date is required.
+        </div>
 
+        <!-- Description -->
         <label>Description</label>
-        <input type="text" [(ngModel)]="transaction.description" name="description" />
+        <input 
+          type="text" 
+          [(ngModel)]="transaction.description" 
+          name="description" 
+          required 
+          minlength="3"
+          #descCtrl="ngModel" />
+        <div class="error" *ngIf="descCtrl.invalid && descCtrl.touched">
+          Description must be at least 3 characters.
+        </div>
 
+        <!-- Amount -->
         <label>Amount</label>
-        <input type="number" [(ngModel)]="transaction.amount" name="amount" />
+        <input 
+          type="number" 
+          [(ngModel)]="transaction.amount" 
+          name="amount" 
+          required 
+          min="1"
+          #amountCtrl="ngModel" />
+        <div class="error" *ngIf="amountCtrl.invalid && amountCtrl.touched">
+          Amount must be greater than 0.
+        </div>
 
+        <!-- Category -->
         <label>Category</label>
-        <select [(ngModel)]="transaction.category" [compareWith]="compareCategory" name="category">
+        <select 
+          [(ngModel)]="transaction.category" 
+          [compareWith]="compareCategory" 
+          name="category"
+          required
+          #catCtrl="ngModel">
+          <option [ngValue]="null" disabled selected>Select a category</option>
           <option *ngFor="let cat of categories" [ngValue]="cat">{{ cat.name }}</option>
         </select>
+        <div class="error" *ngIf="catCtrl.invalid && catCtrl.touched">
+          Please select a category.
+        </div>
 
+        <!-- Transaction Type -->
         <label>Transaction Type</label>
-        <select [(ngModel)]="transaction.transactionType" name="transactionType">
+        <select 
+          [(ngModel)]="transaction.transactionType" 
+          name="transactionType" 
+          required
+          #typeCtrl="ngModel">
+          <option value="" disabled selected>Select type</option>
           <option value="INCOME">Income</option>
           <option value="EXPENSE">Expense</option>
         </select>
-      </form>
-    </div>
+        <div class="error" *ngIf="typeCtrl.invalid && typeCtrl.touched">
+          Please select a transaction type.
+        </div>
 
-    <!-- Footer -->
-    <div class="modal-footer">
-      <button class="btn cancel" (click)="onCancel()">Cancel</button>
-      <button class="btn save" (click)="onSave()">
-        {{ mode === 'create' ? 'Create' : 'Update' }}
-      </button>
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button class="btn cancel" type="button" (click)="onCancel()">Cancel</button>
+          <button class="btn save" type="submit" [disabled]="transactionForm.invalid">
+            {{ mode === 'create' ? 'Create' : 'Update' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
