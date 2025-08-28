@@ -12,7 +12,7 @@ The core API endpoints for this application are:
 
 #### Transaction APIs (`/financetracker/transaction/api/v1`)
 
-  * **`GET /getAll`**: Retrieves all transactions with optional filtering.
+  * **`PUT /getAll`**: Retrieves all transactions with optional filtering.
   * **`GET /get/{id}`**: Fetches a specific transaction by its ID.
   * **`POST /add`**: Creates a new transaction.
   * **`PUT /edit`**: Updates an existing transaction.
@@ -36,10 +36,10 @@ The frontend is built using **Angular**, with Node version 22.18.0 and npm versi
 
 ### Key Features
 
-  * [cite\_start]**Transaction Management**: Add, edit, and delete transactions[cite: 26].
-  * [cite\_start]**Dashboard**: A dashboard for any selected month showing total income, total expenses, and net balance[cite: 27, 28, 29, 30].
-  * [cite\_start]**Category Breakdown**: A simple category breakdown using a bar chart or table[cite: 31].
-  * [cite\_start]**CSV Export**: Ability to export transactions to a CSV file (optional)[cite: 35].
+  * **Transaction Management**: Add, edit, and delete transactions.
+  * **Dashboard**: A dashboard for any selected month showing total income, total expenses, and net balance.
+  * **Category Breakdown**: A simple category breakdown using a bar chart or table.
+  * **CSV Export**: Ability to export transactions to a CSV file (optional).
 
 -----
 
