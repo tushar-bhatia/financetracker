@@ -39,7 +39,7 @@ The frontend is built using **Angular**, with Node version 22.18.0 and npm versi
   * **Transaction Management**: Add, edit, and delete transactions.
   * **Dashboard**: A dashboard for any selected month showing total income, total expenses, and net balance.
   * **Category Breakdown**: A simple category breakdown using a bar chart or table.
-  * **CSV Export**: Ability to export transactions to a CSV file (optional).
+  * **CSV Export**: Ability to export transactions to a xlsx file.
 
 -----
 
