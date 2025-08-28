@@ -40,7 +40,7 @@ class TransactionControllerTest {
         Transaction t2 = new Transaction(2, LocalDate.now(), 5000.0, new Category("Bills"), "EXPENSE", "Room Rent");
         Mockito.when(transactionService.displayTransactions(null)).thenReturn(Arrays.asList(t1, t2));
 
-        mockMvc.perform(get("/financetracker/transaction/api/v1/getAll"))
+        mockMvc.perform(post("/financetracker/transaction/api/v1/getAll"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].description").value("Groceries"));
@@ -82,7 +82,7 @@ class TransactionControllerTest {
         Mockito.when(categoryService.findCategoryById(Mockito.anyInt())).thenReturn(category);
         String json = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/financetracker/transaction/api/v1/edit")
+        mockMvc.perform(put("/financetracker/transaction/api/v1/edit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
